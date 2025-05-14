@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Expense Calculator</h1>
+    <form id="expenseForm">
+        <input type="text" id="categoryInput" placeholder="Category" required>
+        <input type="number" id="amountInput" placeholder="Amount ($)" required>
+        <button type="submit">Add Expense</button>
+    </form>
+    <button id="listButton">List Expenses</button>
+    <button id="calculateButton">Calculate Expenses</button>
+    <form id="updateForm">
+        <input type="number" id="updateId" placeholder="ID" required>
+        <input type="text" id="updateCategory" placeholder="New Category" required>
+        <input type="number" id="updateAmount" placeholder="New Amount ($)" required>
+        <button type="submit">Update Expense</button>
+    </form>
+    <form id="deleteForm">
+        <input type="number" id="deleteId" placeholder="ID" required>
+        <button type="submit">Delete Expense</button>
+    </form>
+    <div class="result" id="result"></div>
+    <script>
+        document.getElementById('expenseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const category = document.getElementById('categoryInput').value;
+            const amount = parseFloat(document.getElementById('amountInput').value);
+            fetch('/api/expenses/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category, amount })
+            }).then(response => response.text()).then(data => {
+                document.getElementById('result').textContent = 'Expense added!';
+            });
+        });
+
+        document.getElementById('listButton').addEventListener('click', function() {
+            fetch('/api/expenses/list').then(response => response.json()).then(data => {
+                const formattedList = data.map((expense, index) => `${index + 1}. ${expense.category}: $${expense.amount}`).join('<br>');
+                document.getElementById('result').innerHTML = formattedList;
+            });
+        });
+
+        document.getElementById('calculateButton').addEventListener('click', function() {
+            fetch('/api/expenses/calculate').then(response => response.text()).then(data => {
+                document.getElementById('result').innerHTML = data.replace(/\n/g, '<br>');
+            });
+        });
+
+        document.getElementById('updateForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const id = document.getElementById('updateId').value;
+            const category = document.getElementById('updateCategory').value;
+            const amount = parseFloat(document.getElementById('updateAmount').value);
+            fetch(`/api/expenses/update/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category, amount })
+            }).then(response => response.text()).then(data => {
+                document.getElementById('result').textContent = 'Expense updated!';
+            });
+        });
+
+        document.getElementById('deleteForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const id = document.getElementById('deleteId').value;
+            fetch(`/api/expenses/delete/${id}`, {
+                method: 'DELETE'
+            }).then(response => response.text()).then(data => {
+                document.getElementById('result').textContent = 'Expense deleted!';
+            });
+        });
+    </script>
+</body>
+</html> 

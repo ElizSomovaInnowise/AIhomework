@@ -3,8 +3,13 @@ package com.example.aihomework.controller;
 import com.example.aihomework.model.Expense;
 import com.example.aihomework.service.ExpenseService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,16 +24,29 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
+    @PostMapping("/add")
+    public void addExpense(@RequestBody Expense expense) {
+        expenseService.addExpense(expense);
+    }
+
+    @GetMapping("/list")
+    public List<Expense> listExpenses() {
+        return expenseService.getAllExpenses();
+    }
+
+    @PutMapping("/update/{id}")
+    public void updateExpense(@PathVariable int id, @RequestBody Expense expense) {
+        expenseService.updateExpense(id, expense);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteExpense(@PathVariable int id) {
+        expenseService.deleteExpense(id);
+    }
+
     @GetMapping("/calculate")
     public String calculateExpenses() {
-        List<Expense> expenses = Arrays.asList(
-                new Expense("Groceries", 15000),
-                new Expense("Rent", 40000),
-                new Expense("Transportation", 5000),
-                new Expense("Entertainment", 10000),
-                new Expense("Communication", 2000),
-                new Expense("Gym", 3000)
-        );
+        List<Expense> expenses = expenseService.getAllExpenses();
 
         double total = expenseService.calculateTotal(expenses);
         double average = expenseService.calculateAverage(expenses);

@@ -17,4 +17,20 @@ function calculateExpenses() {
     document.getElementById('total').textContent = total.toFixed(2) + ' $';
     document.getElementById('average').textContent = average.toFixed(2) + ' $';
     document.getElementById('top3').textContent = top3.join(', ');
-} 
+}
+
+document.getElementById('expenseForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const category = document.getElementById('categoryInput').value;
+    const amount = parseFloat(document.getElementById('amountInput').value);
+    if (category && !isNaN(amount)) {
+        const tableBody = document.getElementById('expenseTable').getElementsByTagName('tbody')[0];
+        const newRow = tableBody.insertRow();
+        const categoryCell = newRow.insertCell(0);
+        const amountCell = newRow.insertCell(1);
+        categoryCell.textContent = category;
+        amountCell.textContent = amount;
+        document.getElementById('categoryInput').value = '';
+        document.getElementById('amountInput').value = '';
+    }
+}); 

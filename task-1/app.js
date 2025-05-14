@@ -9,7 +9,7 @@ document.getElementById('calculateButton').addEventListener('click', function() 
     const expenses = [];
 
     rows.forEach((row, index) => {
-        if (index === 0) return; // Пропустить заголовок
+        if (index === 0) return; 
         const cells = row.querySelectorAll('td');
         const category = cells[0].textContent;
         const amount = parseFloat(cells[1].textContent);
@@ -27,4 +27,20 @@ document.getElementById('calculateButton').addEventListener('click', function() 
         <p>Average daily expense: $${average.toFixed(2)}</p>
         <p>Top 3 expenses: ${top3.map(e => `${e.category} ($${e.amount})`).join(', ')}</p>
     `;
+});
+
+document.getElementById('expenseForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const category = document.getElementById('categoryInput').value;
+    const amount = parseFloat(document.getElementById('amountInput').value);
+    if (category && !isNaN(amount)) {
+        const table = document.getElementById('expenseTable');
+        const newRow = table.insertRow();
+        const categoryCell = newRow.insertCell(0);
+        const amountCell = newRow.insertCell(1);
+        categoryCell.textContent = category;
+        amountCell.textContent = amount;
+        document.getElementById('categoryInput').value = '';
+        document.getElementById('amountInput').value = '';
+    }
 }); 

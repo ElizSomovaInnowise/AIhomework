@@ -4,6 +4,9 @@ public class Expense {
     private String category;
     private double amount;
 
+    public Expense() {
+    }
+
     public Expense(String category, double amount) {
         this.category = category;
         this.amount = amount;
