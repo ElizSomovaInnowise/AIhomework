@@ -1,0 +1,28 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#expenseTable {
+    margin-bottom: 20px;
+}
+
+button {
+    margin-bottom: 20px;
+}
+
+#app {
+    text-align: center;
+} 
